@@ -1,29 +1,17 @@
+
+<img alt="Tauri" src="https://tauri-apps.gallerycdn.vsassets.io/extensions/tauri-apps/tauri-vscode/0.2.6/1679072733881/Microsoft.VisualStudio.Services.Icons.Default" style = "width:100px; height: 100px">
+<img alt="Tauri" src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/Vue.js_Logo_2.svg/2367px-Vue.js_Logo_2.svg.png" style = "width:80px; height: 80px">
+
 # python-vue-tauri-example
 
-This template should help get you started developing with Vue 3 in Vite.
-
-## Recommended IDE Setup
-
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
-
-## Customize configuration
-
-See [Vite Configuration Reference](https://vitejs.dev/config/).
+Basic example of incorporating Tauri into an existing project made with Vue and using a python sidecar. 
 
 ## Project Setup
 
 ```sh
 npm install
 ```
-
-### Compile and Hot-Reload for Development
-
-```sh
-npm run dev
-```
-
-### Compile and Minify for Production
-
-```sh
-npm run build
+## Run Project
+```bash
+npm run tauri dev
 ```
