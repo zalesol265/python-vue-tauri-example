@@ -4,72 +4,83 @@ import TheWelcome from './components/TheWelcome.vue'
 </script>
 
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="125" height="125" />
+  <div class="container">
+    <h1>Welcome to Tauri!</h1>
 
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
+    <div class="row">
+      <a href="https://tauri.app" target="_blank">
+        <img src="./assets/tauri.svg" class="logo tauri" alt="Tauri logo" />
+      </a>
+
+          <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="125" height="125" />
     </div>
-  </header>
 
-  <main>
-    <TheWelcome />
-    <!-- Access the pre-bundled global API functions -->
-    <button @click="invokeGreet">Invoke Greet</button>
+    <p>Fill out the form below and click Greet to get a response from test.py</p>
 
-    <!-- Display the response -->
-    <p>{{ greetResponse }}</p>
-  </main>
+    <div>
+      <input v-model="name" type="text" placeholder="Enter your name" />
+      <input v-model="arg1" type="text" placeholder="Enter argument 1" />
+      <input v-model="arg2" type="text" placeholder="Enter argument 2" />
+    </div>
+
+    <button @click="greet">Greet</button>
+
+    <div style="margin-top: 20px;">
+      <div id="greetMsg">{{ greetingMsg }}</div>
+      <div id="argMsg">{{ argumentsMsg }}</div>
+    </div>
+  </div>
 </template>
 
 <script>
 export default {
   data() {
     return {
-      greetResponse: null,
+      name: "",
+      arg1: "",
+      arg2: "",
+      greetingMsg: "",
+      argumentsMsg: "",
     };
   },
   methods: {
-    async invokeGreet() {
-      try {
-
-        const response = await window.__TAURI__.tauri.invoke('greet', { name: 'World' });
-
-        this.greetResponse = response;
-      } catch (error) {
-        console.error('Error invoking greet:', error);
+    async greet() {
+      // Check if any input is empty
+      if (!this.name || !this.arg1 || !this.arg2) {
+        alert("Please fill in all the fields");
+        return;
       }
+
+      // Pass user-input values to Python script
+      const args = [this.name, this.arg1, this.arg2];
+      const command = window.__TAURI__.shell.Command.sidecar("bin/python/test", args);
+      const output = await command.execute();
+      const { stdout, stderr } = output;
+
+      // Parse the JSON output
+      const jsonOutput = JSON.parse(stdout);
+
+      // Access individual pieces of information
+      this.greetingMsg = jsonOutput.greeting;
+      this.argumentsMsg = jsonOutput.arguments;
     },
   },
 };
 </script>
 
-
 <style scoped>
-header {
-  line-height: 1.5;
+/* Your styles here */
+.logo.tauri:hover {
+  filter: drop-shadow(0 0 2em #ffe21c);
 }
 
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
+input {
+  margin: 20px;
+  width: 500px;
 }
 
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
+button {
+  margin: auto;
+  width: 200px;
 }
 </style>
